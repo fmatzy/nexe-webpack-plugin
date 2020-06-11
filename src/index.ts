@@ -1,3 +1,2 @@
-export function main() {
-  console.log('Hello, world');
-}
+export * from './nexe-plugin';
+export * from './options';
