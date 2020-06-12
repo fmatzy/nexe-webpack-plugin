@@ -1,6 +1,6 @@
 {
   "name": "nexe-webpack-plugin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Webpack plugin to emit binary package compiled by nexe",
   "repository": "github:fmatzy/nexe-webpack-plugin",
   "author": "fmatzy",
