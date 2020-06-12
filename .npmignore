@@ -13,3 +13,4 @@ commitlint.config.js
 .prettierignore
 .prettierrc
 tsconfig.json
+__fixtures__
