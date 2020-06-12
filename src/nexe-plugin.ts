@@ -19,25 +19,27 @@ export class NexePlugin implements Plugin {
     const webpackOutputPath = compiler.options.output?.path || '';
 
     compiler.hooks.emit.tapPromise('NexePlugin', async (compilation) => {
-      for (const options of this.options) {
-        const { input = 'main.js' } = options;
-        const assetSource: AssetSource = compilation.assets[input];
-        if (!assetSource) {
-          compilation.errors.push(new Error(`input source "${input}" not found`));
-          return;
-        }
+      await Promise.all(
+        this.options.map(async (options) => {
+          const { input = 'main.js' } = options;
+          const assetSource: AssetSource = compilation.assets[input];
+          if (!assetSource) {
+            compilation.errors.push(new Error(`input source "${input}" not found`));
+            return;
+          }
 
-        const inputSource = assetSource.source().toString();
+          const inputSource = assetSource.source().toString();
 
-        const bundledOptions = setBundleSource(options, inputSource);
-        await nexeCompile({
-          ...bundledOptions,
-          input: '-',
-          output: join(webpackOutputPath, options.output || ''),
-          bundle: resolve(__dirname, './create-bundle'),
-          silent: true,
-        });
-      }
+          const bundledOptions = setBundleSource(options, inputSource);
+          await nexeCompile({
+            ...bundledOptions,
+            input: '-',
+            output: join(webpackOutputPath, options.output || ''),
+            bundle: resolve(__dirname, './create-bundle'),
+            silent: true,
+          });
+        })
+      );
     });
   }
 }
