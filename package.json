@@ -9,7 +9,11 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "clean": "rimraf ./lib",
+    "test": "jest",
+    "lint": "eslint ./src/**/*.ts",
+    "format": "prettier --write ./src/**/*.ts",
+    "prepublishOnly": "npm run clean && npm run build && npm run test"
   },
   "dependencies": {
     "nexe": "^3.3.2"
