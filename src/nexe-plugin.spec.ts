@@ -5,14 +5,14 @@ import webpack, { Stats } from 'webpack';
 import { getBundleSource } from './create-bundle';
 import { NexePlugin } from './nexe-plugin';
 
-let bundleSource = '';
+let nexeOptions: Partial<NexeOptions> = {};
 
 jest.mock('nexe', () => ({
   compile: jest.fn(async (options?: Partial<NexeOptions>) => {
     if (!options) {
       return;
     }
-    bundleSource = getBundleSource(options);
+    nexeOptions = options;
   }),
 }));
 
@@ -28,6 +28,7 @@ describe('NexePlugin', () => {
       plugins: [
         new NexePlugin({
           input: 'main.js',
+          output: 'test-bin',
         }),
       ],
     });
@@ -49,9 +50,12 @@ describe('NexePlugin', () => {
     const { compilation } = stats;
     expect(compilation.errors.length).toBe(0);
 
+    expect(nexeOptions.output).toBe(resolve(__dirname, '../__fixtures__/build/test-bin'));
+
     const webpackOutput = memoryFS
       .readFileSync(resolve(__dirname, '../__fixtures__/build/main.js'))
       .toString();
+    const bundleSource = getBundleSource(nexeOptions);
     expect(webpackOutput).toBe(bundleSource);
   });
 });
