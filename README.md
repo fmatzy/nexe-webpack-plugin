@@ -16,12 +16,13 @@ Configuration:
 
 ```js
 const { NexePlugin } = require('nexe-webpack-plugin');
+const { resolve } = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: 'entry.js',
+  entry: './entry.js',
   output: {
-    path: 'build',
+    path: resolve(__dirname, 'build'),
   },
   plugins: [
     new NexePlugin({
